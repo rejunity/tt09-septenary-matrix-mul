@@ -1,14 +1,93 @@
 7x7x5 weigths
 
 
-* 6 slices after initial commit (OL2)
-[4x2 tiles] fails in detailed routing with OL2
+NOTE(OL2 vs OL1): 4,5 and 6 slices (initial commit) fail in detailed routing with OL2 and 4x2 tiles. OL1 succeeds!
+
+* 7 slices after initial commit (OL1)
+
+	Utilisation (%)	Wire length (um)
+	56.08	437925
+
+	Category	Cells	Count
+	Fill	decap fill	16891
+	Buffer	buf clkbuf	4776
+	Tap	tapvpwrvgnd	4399
+	Misc	dlymetal6s2s dlygate4sd3 conb	4380
+	Flip Flops	dfxtp	3944
+	AND	a21boi and2 and3 and4	2633
+	Multiplexer	mux2	1600
+	Combo Logic	or2b o21ai a41o a211o a21o and3b a21bo o21a a31o or3b a21oi o211a and2b or4bb a22o o31a o21bai and4bb o21ba a311oi a31oi or4b nand3b a221o a2111oi o41a and4b a311o nor4b nand4b a2bb2o a2111o o31ai o2bb2a o311a o211ai o22a a22oi o221a o32a nor2b o221ai	1332
+	NOR	nor2 xnor2 nor4 nor3	511
+	OR	xor2 or2 or4 or3	472
+	NAND	nand3 nand2 nand4 nand2b	390
+	Diode	diode	205
+	Inverter	inv	148
+	Clock	clkinv	2
+	20393 total cells (excluding fill and tap cells)
+
+	(ternary) similar performance to 4 slices (20 MACs) vs 21 MACs	~1.7 area ratio (normalized to the same MAC #)
+
+* 6 slices after initial commit (OL1)
+[8x2 tiles]
+
+	Utilisation (%)	Wire length (um)
+	42.96	318033
+
+	Category	Cells	Count
+	Fill	decap fill	19550
+	Tap	tapvpwrvgnd	4399
+	Buffer	buf clkbuf	3567
+	Misc	dlymetal6s2s dlygate4sd3 conb	3186
+	Flip Flops	dfxtp	2931
+	AND	and2 and3 a21boi and4	1972
+	Multiplexer	mux2 mux4	1205
+	Combo Logic	or2b o21ai a41o o211a o21a and2b a31o or3b a21oi a21o o21ba o31a a211o o311a and4bb o41a nor4b a221oi o31ai a22o o21bai a2111o a21bo or4b a2111oi nand3b a211oi and3b and4b a2bb2o a31oi a221o o41ai o22a a22oi o221a o32a a311o	1203
+	NOR	nor2 xnor2 nor3	479
+	OR	or2 xor2 or4 or3	429
+	NAND	nand2 nand3 nand4 nand2b	274
+	Inverter	inv	104
+	Diode	diode	93
+	Clock	clkinv	2
+	15445 total cells (excluding fill and tap cells)
+
+	(ternary) similar area/cells to 5 slices (25 MACs) vs 18 MACs	~0.72
+
+* 5 slices after initial commit (OL1)
+[8x2 tiles]
+
+	Utilisation (%)	Wire length (um)
+	31.48	236462
+
+	Category	Cells	Count
+	Fill	decap fill	21427
+	Tap	tapvpwrvgnd	4399
+	Buffer	buf clkbuf	2486
+	Misc	dlymetal6s2s dlygate4sd3 conb	2237
+	Flip Flops	dfxtp	2068
+	AND	and2 and3 and4 a21boi	1391
+	Combo Logic	or2b o21ai a41o o2111a a31o or3b a21oi a21o o211a a21bo nand3b o21ba o31a and2b a31oi o21a a211o a311oi or4b a221o o31ai o2bb2a a22o nand4b a2111oi o211ai o41a and3b and4b o311a a2bb2o a2111o or4bb a32o nor2b a211oi o22ai o32a a311o o221a o21bai a22oi	964
+	Multiplexer	mux2 mux4	903
+	NOR	xnor2 nor2 nor4 nor3	370
+	OR	or2 xor2 or3 or4	346
+	NAND	nand3 nand2 nand4 nand2b	282
+	Inverter	inv	125
+	Diode	diode	62
+
+	11234 total cells (excluding fill and tap cells)
+
+	(ternary) similar performance to 3 slices (15 MACs) vs 15 MACs	~1.61 area ratio
+	(ternary) similar area/cells to 4 slices (20 MACs) vs 15 MACs
+	(ternary)   ~1.88 % per MAC row 
+				~2.1 % per MAC row
+
+
 
 * 4 slices after initial commit (OL1)
 [4x2 tiles]
 
 	Utilisation (%)	Wire length (um)
 	44.16	149720
+	22.08 % (~ for 16 tiles)
 
 	Category	Cells	Count
 	Fill	decap fill	9797
@@ -25,14 +104,21 @@
 	Inverter	inv	71
 	Diode	diode	12
 	
-	7585 total cells (excluding fill and tap cells)
+			   7585 total cells (excluding fill and tap cells)
+	(ternary) 10575 total cells (excluding fill and tap cells)	Flip Flops	dfxtp	2066
+	(ternary) 16x31.82% = 5,0912	 10575/5.1 ~~> 2077
+	(ternary) 10575/(4*5) = 529 cells per MAC row 				2066/20=103 FFs per MAC row
+			  8x44.16% = 3,5328   7585/3.5 ~~> 2147
+			   7585/(4*3) = 632 cells per MAC row				1354/12=113 FFs per MAC row
 
+	(ternary) similar area/cells to 3 slices -15% (15 MACs) vs 12 MACs
 
 * 3 slices after initial commit (OL2)
 [2x2 tiles]
 
 	Utilisation (%)	Wire length (um)
 	53.424 %	98087
+	13.356 % (~ for 16 tiles)
 
 	Category	Cells	Count
 	Fill	decap fill	3752
@@ -52,12 +138,14 @@
 
 	4175 total cells (excluding fill and tap cells)
 
+	(ternary) similar performance to 2 slices (10 MACs) vs 9 MACs	~1.41 area ratio (normalized to the same MAC #)
+
 * 2 slices after initial commit (OL2)
 [2x2 tiles]
 
 	Utilisation (%)	Wire length (um)
 	29.959 %	47314
-	2x2 tiles
+	7.49 % (~ for 16 tiles)
 
 	Category	Cells	Count
 	Fill	decap fill	5191
@@ -84,7 +172,8 @@
 
 	Utilisation (%)	Wire length (um)
 	12.836 %	20629
-	2x2 tiles
+	3.2 % (~ for 16 tiles)
+	
 
 	Category	Cells	Count
 	Fill	decap fill	5927
@@ -102,4 +191,13 @@
 	Clock	clkinv clkinvlp	8
 	Diode	diode	1
 
-	1008 total cells (excluding fill and tap cells)
+			  1008 total cells (excluding fill and tap cells)
+	(ternary) 1391 total cells (excluding fill and tap cells)	Flip Flops	dfxtp	158
+	(ternary) 4.21%/5 = 0.84% per MAC
+	(ternary) 1391/5 = 278 cells per MAC 						158/5=32 FFs per MAC
+			  1008/3 = 336 cells per MAC						115/3=38 FFs per MAC
+			  3.20%/3 = 1.07% per MAC 			  
+	(ratio)   		  MAC is ~20..25% larger than ternary
+					  60% MAC performance per input bandwidth
+					  80% MAC performance per area
+

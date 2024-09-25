@@ -1,41 +1,45 @@
 ![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg) ![](../../workflows/fpga/badge.svg)
 
-# Tiny Tapeout Verilog Project Template
 
-- [Read the documentation for project](docs/info.md)
+# FPGA/ASIC for low-precision 2.67 bits/param Neural Network accelerator
 
-## What is Tiny Tapeout?
+This implementation builds on top of 1.58 bit systolic array: https://github.com/rejunity/tiny-asic-1_58bit-matrix-mul, but instead of ternary weights it uses **septenary and quinary weight**.
 
-Tiny Tapeout is an educational project that aims to make it easier and cheaper than ever to get your digital and analog designs manufactured on a real chip.
+Using septenary and quinary weights 3 weights can be stored in 1 byte - **2.67 bit per parameter**.
+
+## Observations
+- A single 2.67bpp *(bit per param)* MAC unit is **~25% larger** in area than 1.58bpp ternary MAC unit.
+- An array of 2.67bpp MAC units taking **the same area** as an array of 1.58bpp ternary MAC unit will provide **~20% less** operations per sec.
+- Given the same memory bandwidth 2.67bpp array is **~40% slower**.
+
+To outperform ternary:
+- 2.76bpp compressed network must achieve the same classification performance with **~40% less parameters** i.e. 591 parameters instead of 1000 parameters OR
+- given the same amount of netwok parameters 2.76bpp accelerator would need to be **75% larger in area** (probably x3 times more power consumption) to maintain the same inference speed!
+
+
+## Measurements
+
+Sizes of the currently synthesized and measured systolic arrays using OpenLane and eFabless 130nm PDK:
+- 1.58bpp - 5x1 .. 30x6 grids
+- 2.67bpp - 3x1 .. 18x6 grids
+
+
+## Intent & ASIC
+Low-precision weight is inspired by Keller Jordan post: https://x.com/kellerjordan0/status/1837874116533407990 This implementation is an exploration of the design space - intent is to measure how chip area, precsion and memory bandwidth affects the performance of the systolic array and AI accelerators.
+
+This ASIC will be fabricated using eFabless 130 nm process via [Tiny Tapeout](https://tinytapeout.com).
+
+
+# ASIC 1.58 bit aka TERNARY weight LLMs 
+
+See [The Era of 1-bit LLMs: All Large Language Models are in 1.58 Bits](https://arxiv.org/pdf/2402.17764.pdf) paper that reduces weights of the [Large Language Model](https://en.wikipedia.org/wiki/Large_language_model) to ternary representation `{-1, 0, 1}`.
+
+
+# What is Tiny Tapeout?
+
+TinyTapeout is an educational project that aims to make it easier and cheaper than ever to get your digital designs manufactured on a real chip.
 
 To learn more and get started, visit https://tinytapeout.com.
-
-## Set up your Verilog project
-
-1. Add your Verilog files to the `src` folder.
-2. Edit the [info.yaml](info.yaml) and update information about your project, paying special attention to the `source_files` and `top_module` properties. If you are upgrading an existing Tiny Tapeout project, check out our [online info.yaml migration tool](https://tinytapeout.github.io/tt-yaml-upgrade-tool/).
-3. Edit [docs/info.md](docs/info.md) and add a description of your project.
-4. Adapt the testbench to your design. See [test/README.md](test/README.md) for more information.
-
-The GitHub action will automatically build the ASIC files using [OpenLane](https://www.zerotoasiccourse.com/terminology/openlane/).
-
-## Enable GitHub actions to build the results page
-
-- [Enabling GitHub Pages](https://tinytapeout.com/faq/#my-github-action-is-failing-on-the-pages-part)
-
-## Resources
-
 - [FAQ](https://tinytapeout.com/faq/)
 - [Digital design lessons](https://tinytapeout.com/digital_design/)
-- [Learn how semiconductors work](https://tinytapeout.com/siliwiz/)
 - [Join the community](https://tinytapeout.com/discord)
-- [Build your design locally](https://www.tinytapeout.com/guides/local-hardening/)
-
-## What next?
-
-- [Submit your design to the next shuttle](https://app.tinytapeout.com/).
-- Edit [this README](README.md) and explain your design, how it works, and how to test it.
-- Share your project on your social network of choice:
-  - LinkedIn [#tinytapeout](https://www.linkedin.com/search/results/content/?keywords=%23tinytapeout) [@TinyTapeout](https://www.linkedin.com/company/100708654/)
-  - Mastodon [#tinytapeout](https://chaos.social/tags/tinytapeout) [@matthewvenn](https://chaos.social/@matthewvenn)
-  - X (formerly Twitter) [#tinytapeout](https://twitter.com/hashtag/tinytapeout) [@tinytapeout](https://twitter.com/tinytapeout)
