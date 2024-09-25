@@ -23,7 +23,7 @@ To outperform ternary:
 
 ## Measurements
 
-Sizes of the currently synthesized and measured systolic arrays using OpenLane and eFabless 130nm PDK:
+Sizes of the currently synthesized and measured systolic arrays using OpenLane and eFabless 130nm PDK via [Tiny Tapeout](https://tinytapeout.com):
 - 1.58bpp - 5x1 .. 30x6 grids
 - 2.67bpp - 3x1 .. 18x6 grids
 
