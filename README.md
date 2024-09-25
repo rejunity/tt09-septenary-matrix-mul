@@ -3,13 +3,16 @@
 
 # FPGA/ASIC for low-precision 2.67 bits/param Neural Network accelerator
 
-This implementation builds on top of 1.58 bit systolic array: https://github.com/rejunity/tiny-asic-1_58bit-matrix-mul, but instead of ternary weights it uses **septenary and quinary weights**.
+Inspired by low-precision weight investigation by Keller Jordan post: https://x.com/kellerjordan0/status/1837874116533407990, this implementation builds on top of 1.58 bit systolic array https://github.com/rejunity/tiny-asic-1_58bit-matrix-mul However instead of ternary weights it uses **septenary and quinary weights**.
 
 Using septenary and quinary weights 3 weights can be stored in 1 byte - **2.67 bit per parameter**.
 
 3 parameters are stored in 8 bits:
 - 2 septenary {-2,-1,-.5,0,.5,1,2} and
 - 1 quinary {-2,-1,0,1,2}
+
+ASIC synthesis on 130 nm:
+![](./docs/15x5array_16tiles_1362b18.jpg)
 
 ## Observations based on chip synthesis for 130 nm process
 - A single 2.67bpp *(bit per param)* MAC unit is **~25% larger** in area than 1.58bpp ternary MAC unit.
@@ -70,7 +73,6 @@ Sizes of the currently synthesized and measured systolic arrays using OpenLane a
 Low-precision weight is inspired by Keller Jordan post: https://x.com/kellerjordan0/status/1837874116533407990 This implementation is an exploration of the design space - intent is to measure how chip area, precsion and memory bandwidth affects the performance of the systolic array and AI accelerators.
 
 This ASIC will be fabricated using eFabless 130 nm process via [Tiny Tapeout](https://tinytapeout.com).
-
 
 # ASIC 1.58 bit aka TERNARY weight LLMs 
 
