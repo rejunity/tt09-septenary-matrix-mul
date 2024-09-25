@@ -1,7 +1,59 @@
 7x7x5 weigths
 
 
-* 2 slices after initial commit 
+* 6 slices after initial commit (OL2)
+[4x2 tiles] fails in detailed routing with OL2
+
+* 4 slices after initial commit (OL1)
+[4x2 tiles]
+
+	Utilisation (%)	Wire length (um)
+	44.16	149720
+
+	Category	Cells	Count
+	Fill	decap fill	9797
+	Tap	tapvpwrvgnd	2158
+	Buffer	clkbuf buf	1642
+	Misc	dlygate4sd3 dlymetal6s2s conb	1404
+	Flip Flops	dfxtp	1354
+	AND	and2 and3 and4 a21boi	910
+	Combo Logic	or2b o21a and2b o41a o21ai a2111oi a21o o21ba a21oi or3b o31a o211a or4b a31o a22o and3b a41o a211o a211oi or4bb a31oi a21bo o31ai a2111o o311a o21bai o22a a221oi o32a nor2b o221a a2bb2o a22oi o221ai a221o o2bb2a a32o o211ai	734
+	Multiplexer	mux2	640
+	NOR	nor2 xnor2 nor4 nor3	319
+	OR	xor2 or2 or3 or4	318
+	NAND	nand2 nand3 nand4	181
+	Inverter	inv	71
+	Diode	diode	12
+	
+	7585 total cells (excluding fill and tap cells)
+
+
+* 3 slices after initial commit (OL2)
+[2x2 tiles]
+
+	Utilisation (%)	Wire length (um)
+	53.424 %	98087
+
+	Category	Cells	Count
+	Fill	decap fill	3752
+	Tap	tapvpwrvgnd	1037
+	Misc	conb dlymetal6s2s dlygate4sd3	816
+	Flip Flops	dfxtp	791
+	Combo Logic	o21ai a211o a2111o a21o a41o and2b a31o o21bai a21oi o21ba a21bo a221oi or3b o21a nand3b o31a o211ai o2111a o211a or4b a221o or4bb o41a a31oi and3b a22o o2bb2a and4b o22a a2bb2o a32o a211oi a311o o221ai o311a o32a o221a a22oi	571
+	AND	and4 and3 and2 a21boi	524
+	Multiplexer	mux2	411
+	Buffer	clkbuf buf bufinv	289
+	NOR	nor2 xnor2 nor4 nor3	225
+	OR	or2 xor2 or4 or3	209
+	NAND	nand2b nand2 nand3 nand4	204
+	Inverter	inv	90
+	Diode	diode	39
+	Clock	clkinvlp clkinv	6
+
+	4175 total cells (excluding fill and tap cells)
+
+* 2 slices after initial commit (OL2)
+[2x2 tiles]
 
 	Utilisation (%)	Wire length (um)
 	29.959 %	47314
@@ -27,7 +79,9 @@
 
 
 
-* 1 slices after initial commit 
+* 1 slices after initial commit (OL2)
+[2x2 tiles]
+
 	Utilisation (%)	Wire length (um)
 	12.836 %	20629
 	2x2 tiles
