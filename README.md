@@ -20,6 +20,44 @@ To outperform ternary:
 - 2.76bpp compressed network must achieve the same classification performance with **~40% less parameters** i.e. 591 parameters instead of 1000 parameters OR
 - given the same amount of netwok parameters 2.76bpp accelerator would need to be **75% larger in area** (probably x3 times more power consumption) to maintain the same inference speed!
 
+## Code
+**Septernary & quinary weight decoder.** Surprisingly a pretty 'dumb' approach to decoding produces a pretty compact logic.
+```
+  module unpack_775_weights(input      [7:0] packed_weights,
+                            output reg [2:0] zero,
+                            output reg [2:0] sign,
+                            output reg [2:0] mul2,
+                            output reg [2:0] div2);
+      always @(*) begin
+          case(packed_weights)
+          8'd000: begin zero = 3'b111; sign = 3'b000; mul2 = 3'b000; div2 = 3'b000; end //     0    0    0
+          8'd001: begin zero = 3'b011; sign = 3'b000; mul2 = 3'b000; div2 = 3'b000; end //     1    0    0
+          8'd002: begin zero = 3'b011; sign = 3'b000; mul2 = 3'b100; div2 = 3'b000; end //     2    0    0
+          8'd003: begin zero = 3'b011; sign = 3'b100; mul2 = 3'b000; div2 = 3'b000; end //    -1    0    0
+          8'd004: begin zero = 3'b011; sign = 3'b100; mul2 = 3'b100; div2 = 3'b000; end //    -2    0    0
+          8'd005: begin zero = 3'b101; sign = 3'b000; mul2 = 3'b000; div2 = 3'b010; end //     0  0.5    0
+          8'd006: begin zero = 3'b001; sign = 3'b000; mul2 = 3'b000; div2 = 3'b010; end //     1  0.5    0
+          8'd007: begin zero = 3'b001; sign = 3'b000; mul2 = 3'b100; div2 = 3'b010; end //     2  0.5    0
+          // ...
+```
+
+**Septenary math.** Multiply accumulate unit are implemented as septenary weight (E2M0 format) multiplied by INT8 activation and accumulated in INT18.
+```
+            // sign extend to 9-bit before arithmetic shifts
+            wire signed [8:0] act = $signed({arg_top_curr[7], arg_top_curr[7:0]});
+            wire signed [8:0] addend =
+                mul2 ?  act <<< 1:
+                div2 ?  act >>> 1:
+                        act;
+
+                assign accumulators_next[i*W+W-1] =
+                     zero   ? accumulators[i*W+j] + 0 :
+                    (sign   ? accumulators[i*W+j] - addend :
+                              accumulators[i*W+j] + addend);
+```
+
+
+**Systolic array.** Both inputs (weights & activations) are stationary. Accumulators are double buffered and results are shifted out of the array in a systolic manner. Such approach is closer to Tesla FSD rather than a Google's TPU.
 
 ## Measurements
 
