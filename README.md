@@ -3,11 +3,15 @@
 
 # FPGA/ASIC for low-precision 2.67 bits/param Neural Network accelerator
 
-This implementation builds on top of 1.58 bit systolic array: https://github.com/rejunity/tiny-asic-1_58bit-matrix-mul, but instead of ternary weights it uses **septenary and quinary weight**.
+This implementation builds on top of 1.58 bit systolic array: https://github.com/rejunity/tiny-asic-1_58bit-matrix-mul, but instead of ternary weights it uses **septenary and quinary weights**.
 
 Using septenary and quinary weights 3 weights can be stored in 1 byte - **2.67 bit per parameter**.
 
-## Observations
+3 parameters are stored in 8 bits:
+- 2 septenary {-2,-1,-.5,0,.5,1,2} and
+- 1 quinary {-2,-1,0,1,2}
+
+## Observations based on chip synthesis for 130 nm process
 - A single 2.67bpp *(bit per param)* MAC unit is **~25% larger** in area than 1.58bpp ternary MAC unit.
 - An array of 2.67bpp MAC units taking **the same area** as an array of 1.58bpp ternary MAC unit will provide **~20% less** operations per sec.
 - Given the same memory bandwidth 2.67bpp array is **~40% slower**.
