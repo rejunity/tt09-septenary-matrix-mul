@@ -200,7 +200,7 @@ module systolic_array #(
                 mul2 ?  act <<< 1:
                 div2 ?  act >>> 1:
                         act;
-
+            if (j == 0) begin : compute
                 assign accumulators_next[i*W+W-1] =
                      zero   ? accumulators[i*W+j] + 0 :
                     (sign   ? accumulators[i*W+j] - addend :
