@@ -3,6 +3,107 @@
 
 NOTE(OL2 vs OL1): 4,5 and 6 slices (initial commit) fail in detailed routing with OL2 and 4x2 tiles. OL1 succeeds!
 
+
+OpenROAD.ResizerTimingPostCTS failed with the following errors:[DPL-0036] Detailed placement failed.
+
+* 8 slices OL2+LIGHTER
+
+	Utilisation (%)	Wire length (um)
+	62.866 %	646568
+
+	Category	Cells	Count
+	Fill	decap fill	10226
+	Misc	conb dlymetal6s2s dlygate4sd3	6233
+	Flip Flops	dfxtp	5107
+	Tap	tapvpwrvgnd	4399
+	AND	and2 and3 and4 a21boi	3489
+	Multiplexer	mux2 mux4	1971
+	Buffer	clkbuf buf bufinv	1466
+	Combo Logic	a211o a2111oi a21oi a21o a31o o21ai o211ai o31a and2b a32o and3b a21bo o21a a22o o21bai o22a and4bb or3b a2111o o21ba o31ai a31oi a311o o41a a211oi a41o o211a o2111a a311oi or4bb or4b o41ai nand3b a22oi o311a o221a a2bb2o a221oi o2111ai o2bb2a a221o	1265
+	NOR	nor2 xnor2 nor3 nor4	632
+	OR	or2 xor2 or3 or4	572
+	Diode	diode	462
+	NAND	nand2 nand4 nand2b nand3	448
+	Inverter	inv	135
+	Clock	dlclkp clkinvlp clkinv	45
+	21825 total cells (excluding fill and tap cells)
+
+* 7 slices OL2+LIGHTER
+
+	Utilisation (%)	Wire length (um)
+	49.925 %	433733
+
+	Category	Cells	Count
+	Fill	decap fill	14359
+	Misc	conb dlymetal6s2s dlygate4sd3	4731
+	Tap	tapvpwrvgnd	4399
+	Flip Flops	dfxtp	3944
+	AND	and4 and2 and3 a21boi	2695
+	Multiplexer	mux2	1514
+	Combo Logic	and2b and3b o21a o31a a21oi or3b o21ai a21o a2111o o21ba a21bo o31ai a31o a211o a2111oi a41o o211a a211oi o41a a2bb2o a311o a32oi a22o o22a nand3b and4bb a221o or4b o211ai a31oi o2111a o21bai o2bb2a o32a o221a o311a a22oi a32o	1162
+	Buffer	clkbuf buf bufinv	1142
+	NOR	nor2 xnor2 nor3 nor4	569
+	OR	or2 or4 or3 xor2	493
+	NAND	nand2 nand2b nand4 nand3	411
+	Diode	diode	198
+	Inverter	inv	133
+	Clock	dlclkp clkinvlp clkinv	24
+
+	17016 total cells (excluding fill and tap cells)
+
+* 6 slices OL2+LIGHTER 
+
+
+
+* 5 slices OL2+LIGHTER (precheck fail:Klayout feol failed with 2 DRC violations)
+
+	Utilisation (%)	Wire length (um)
+	28.218 %	281629
+
+	Cell usage by Category
+	Category	Cells	Count
+	Fill	decap fill	19137
+	Tap	tapvpwrvgnd	4399
+	Misc	conb dlymetal6s2s dlygate4sd3	2402
+	Flip Flops	dfxtp	2068
+	AND	and4 and2 and3 a21boi	1429
+	Multiplexer	mux2	852
+	Combo Logic	and2b and3b o21a o31a a21oi or3b o21ai a21o a2111o o21ba a21bo o31ai a31o a211o a2111oi a311oi o211a a221oi o41a a22o o211ai a32o and4b o21bai a41o a31oi a211oi o22a nor3b a221o o2111a o32a o221ai o22ai a2bb2o o221a a22oi nand3b o311a	832
+	Buffer	clkbuf buf bufinv	632
+	NOR	nor2 xnor2 nor3	432
+	OR	or2 or4 or3 xor2	359
+	NAND	nand2 nand2b nand4 nand3	274
+	Inverter	inv	99
+	Diode	diode	93
+	Clock	dlclkp clkinv clkinvlp	19
+
+	9491 total cells (excluding fill and tap cells)
+
+* 4 slices OL2+LIGHTER (precheck fail: Klayout feol failed with 1 DRC violations)
+* 4 slices OL2+LIGHTER with mem2reg identical ^^^ (precheck fail: Klayout feol failed with 1 DRC violations)
+	Utilisation (%)	Wire length (um)
+	19.678 %	177089
+
+	Cell usage by Category
+	Category	Cells	Count
+	Fill	decap fill	21540
+	Tap	tapvpwrvgnd	4399
+	Misc	conb dlymetal6s2s dlygate4sd3	1502
+	Flip Flops	dfxtp	1354
+	AND	and4 and2 and3 a21boi	932
+	Combo Logic	and2b o21ai and3b o21a o31a a21oi or3b a21o a2111o o21ba a21bo o31ai a31o a211o a2111oi a41o o211a o41a a2bb2o a211oi a221o o22a a31oi a311o a22o or4b nor3b a311oi and4b a32o o221a o32a o22ai nand3b o311a o211ai	700
+	Multiplexer	mux2 mux4	576
+	Buffer	clkbuf buf bufinv	463
+	NOR	nor2 xnor2 nor3 nor4	335
+	OR	or4 or2 or3 xor2	301
+	NAND	nand2 nand2b nand4 nand3	226
+	Inverter	inv	82
+	Diode	diode	53
+	Clock	clkinv dlclkp clkinvlp	8
+	
+	6532 total cells (excluding fill and tap cells)
+
+-------------------------------------------------------------------------
 * 7 slices after initial commit (OL1)
 
 	Utilisation (%)	Wire length (um)
@@ -81,7 +182,6 @@ NOTE(OL2 vs OL1): 4,5 and 6 slices (initial commit) fail in detailed routing wit
 				~2.1 % per MAC row
 
 
-
 * 4 slices after initial commit (OL1)
 [4x2 tiles]
 
@@ -112,6 +212,9 @@ NOTE(OL2 vs OL1): 4,5 and 6 slices (initial commit) fail in detailed routing wit
 			   7585/(4*3) = 632 cells per MAC row				1354/12=113 FFs per MAC row
 
 	(ternary) similar area/cells to 3 slices -15% (15 MACs) vs 12 MACs
+
+
+-------------------------------------------------------------------------
 
 * 3 slices after initial commit (OL2)
 [2x2 tiles]
