@@ -98,8 +98,10 @@ module systolic_array #(
     reg [W*8-1:0] arg_top_next;
 
     reg  [SLICE_BITS-1:0] slice_counter;
+    (* mem2reg *)
     reg  signed [17:0] accumulators      [W*H-1:0];
     wire signed [17:0] accumulators_next [W*H-1:0];
+    (* mem2reg *)
     reg  signed [17:0] out_queue         [W*H-1:0];
 
     integer n;
