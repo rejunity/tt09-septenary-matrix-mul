@@ -104,6 +104,16 @@ module systolic_array #(
     (* mem2reg *)
     reg  signed [17:0] out_queue         [W*H-1:0];
 
+    `ifdef SIM
+    assign read_accumulators = accumulators;
+    assign read_out_queue = out_queue;
+    `else
+    sky130_fd_sc_hd__dlygate4sd3_1 accumulators_dlygate[W*H-1:0] ( .X(read_accumulators), .A(accumulators) );
+    sky130_fd_sc_hd__dlygate4sd3_1 out_queue_dlygate   [W*H-1:0] ( .X(read_out_queue),    .A(out_queue) );
+    `endif
+    wire  signed [17:0] read_accumulators[W*H-1:0];
+    wire  signed [17:0] read_out_queue   [W*H-1:0];
+
     integer n;
     always @(posedge clk) begin
         if (reset | restart_inputs | slice_counter == SLICES_MINUS_1)
@@ -176,7 +186,7 @@ module systolic_array #(
                 // if additional (slice_counter-1) wait cycles are introduced
                 // out_queue[n] <= accumulators_next[n];
             end else if (n > 0)
-                out_queue[n-1]  <= out_queue[n];
+                out_queue[n-1]  <= read_out_queue[n];
         end
         /* verilator lint_on BLKLOOPINIT */
     end
@@ -204,18 +214,18 @@ module systolic_array #(
                         act;
             if (j == 0) begin : compute
                 assign accumulators_next[i*W+W-1] =
-                     zero   ? accumulators[i*W+j] + 0 :
-                    (sign   ? accumulators[i*W+j] - addend :
-                              accumulators[i*W+j] + addend);
+                     zero   ? read_accumulators[i*W+j] + 0 :
+                    (sign   ? read_accumulators[i*W+j] - addend :
+                              read_accumulators[i*W+j] + addend);
             end else begin : shift
                 assign accumulators_next[i*W+j-1] =
-                              accumulators[i*W+j];
+                              read_accumulators[i*W+j];
             end
 
             // for debugging purposes in wave viewer
-            wire [17:0] value_curr  = accumulators     [i*W+j];
-            wire [17:0] value_next  = accumulators_next[i*W+j];
-            wire [17:0] value_queue = out_queue        [i*W+j];
+            wire [17:0] value_curr  = read_accumulators     [i*W+j];
+            wire [17:0] value_next  =      accumulators_next[i*W+j];
+            wire [17:0] value_queue = read_out_queue        [i*W+j];
         end
     endgenerate
 
