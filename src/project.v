@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-`define COMPUTE_SLICES 7
+`define COMPUTE_SLICES 8
 
 `default_nettype none
 
