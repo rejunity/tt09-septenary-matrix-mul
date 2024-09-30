@@ -3,6 +3,39 @@
 
 NOTE(OL2 vs OL1): 4,5 and 6 slices (initial commit) fail in detailed routing with OL2 and 4x2 tiles. OL1 succeeds!
 
+NOTE(OL2 + LIGHTER): 4 and 5 produces DRC errors. 6 slices never finishes. 8 and 7 are OK, 9 fails ResizerTimingPostCTS.
+
+
+
+* 4 slices with manually inserted sky130_fd_sc_hd__dlygate4sd3_1, OL2+LIGHTER
+(utilisation is 4% higher 23.541 % vs 19.678 %, but wire is 25% shorter 132943 vs 177089)
+(utilisation is similar to OL1 [which is without DRC fails!] while less total cells 6549 vs 7585)
+
+
+	Utilisation (%)	Wire length (um)
+	23.541 %	132943
+
+	Cell usage by Category
+	Category	Cells	Count
+	Fill	decap fill	22375
+	Tap	tapvpwrvgnd	4399
+	Misc	conb dlygate4sd3 dlymetal6s2s	1504
+	Flip Flops	dfxtp	1354
+	AND	and3 and2 a21boi and4	923
+	Multiplexer	mux2 mux4	614
+	Combo Logic	and2b o21a o31a o21ai or3b a21o a21oi a2111o a22o a211o o211a a31o a32o o21ba o21bai a2111oi a41o a21bo o41ai a31oi o41a a311o o31ai o311a a221o o221a o311ai o22a o2bb2a o211ai and3b o221ai	613
+	Buffer	clkbuf bufinv buf	470
+	OR	or4 or3 xor2 or2	345
+	NOR	nor2 xnor2 nor4 nor3	310
+	NAND	nand2b nand2 nand4 nand3	269
+	Inverter	inv	80
+	Diode	diode	51
+	Clock	dlclkp clkinv clkinvlp	16
+
+	6549 total cells (excluding fill and tap cells)
+
+
+-------------------------------------------------------------------------
 
 OpenROAD.ResizerTimingPostCTS failed with the following errors:[DPL-0036] Detailed placement failed.
 
@@ -51,9 +84,7 @@ OpenROAD.ResizerTimingPostCTS failed with the following errors:[DPL-0036] Detail
 
 	17016 total cells (excluding fill and tap cells)
 
-* 6 slices OL2+LIGHTER 
-
-
+* 6 slices OL2+LIGHTER (never finishes)
 
 * 5 slices OL2+LIGHTER (precheck fail:Klayout feol failed with 2 DRC violations)
 
