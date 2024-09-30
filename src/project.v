@@ -108,12 +108,13 @@ module systolic_array #(
     assign read_accumulators = accumulators;
     assign read_out_queue = out_queue;
     `else
-    genvar q;
+    genvar q, w;
     generate
-    for (q = 0; q < W*H; q = q+1) begin    
-        sky130_fd_sc_hd__dlygate4sd3_1 accumulators_dlygate[17:0] ( .X(read_accumulators[q]), .A(accumulators[q]) );
-        sky130_fd_sc_hd__dlygate4sd3_1 out_queue_dlygate[17:0]    ( .X(read_out_queue[q]),    .A(out_queue[q]) );
-    end
+    for (q = 0; q < W*H; q = q+1)
+        for (w = 0; w < 18; w = w+1) begin
+            sky130_fd_sc_hd__dlygate4sd3_1 accumulators_dlygate ( .X(read_accumulators[q][w]), .A(accumulators[q][w]) );
+            sky130_fd_sc_hd__dlygate4sd3_1 out_queue_dlygate    ( .X(read_out_queue[q][w]),    .A(out_queue[q][w]) );
+        end
     endgenerate
     `endif
     wire  signed [17:0] read_accumulators[W*H-1:0];
