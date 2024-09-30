@@ -104,6 +104,8 @@ module systolic_array #(
     (* mem2reg *)
     reg  signed [17:0] out_queue         [W*H-1:0];
 
+    wire  signed [17:0] read_accumulators[W*H-1:0];
+    wire  signed [17:0] read_out_queue   [W*H-1:0];
     `ifdef SIM
     assign read_accumulators = accumulators;
     assign read_out_queue = out_queue;
@@ -125,9 +127,6 @@ module systolic_array #(
     /* verilator lint_on PINMISSING */
     endgenerate
     `endif
-    wire  signed [17:0] read_accumulators[W*H-1:0];
-    wire  signed [17:0] read_out_queue   [W*H-1:0];
-
     integer n;
     always @(posedge clk) begin
         if (reset | restart_inputs | slice_counter == SLICES_MINUS_1)
