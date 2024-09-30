@@ -104,8 +104,6 @@ module systolic_array #(
     (* mem2reg *)
     reg  signed [17:0] out_queue         [W*H-1:0];
 
-    wire  signed [17:0] read_accumulators[W*H-1:0];
-    wire  signed [17:0] read_out_queue   [W*H-1:0];
     `ifdef SIM
     assign read_accumulators = accumulators;
     assign read_out_queue = out_queue;
@@ -121,12 +119,19 @@ module systolic_array #(
         //     sky130_fd_sc_hd__dlygate4sd3_1 out_queue_dlygate    ( .X(read_out_queue[q][w]),    .A(out_queue[q][w]) );
         // end
     begin
-        sky130_fd_sc_hd__dlygate4sd3_1 accumulators_dlygate[17:0] ( .X(read_accumulators[q][17:0]), .A(accumulators[q][17:0]) );
-        sky130_fd_sc_hd__dlygate4sd3_1 out_queue_dlygate[17:0]    ( .X(read_out_queue[q][17:0]),    .A(out_queue[q][17:0]) );
+        wire  signed [17:0] accumulators_buf;
+        wire  signed [17:0] out_queue_buf;
+        sky130_fd_sc_hd__dlygate4sd3_1 accumulators_dlygate[17:0] ( .X(accumulators_buf),   .A(accumulators[q]) );
+        sky130_fd_sc_hd__dlygate4sd3_1 out_queue_dlygate[17:0]    ( .X(out_queue_buf),      .A(out_queue[q]) );
+        assign read_accumulators[q] = accumulators_buf;
+        assign read_out_queue[q] = out_queue_buf;
     end
     /* verilator lint_on PINMISSING */
     endgenerate
     `endif
+    wire  signed [17:0] read_accumulators[W*H-1:0];
+    wire  signed [17:0] read_out_queue   [W*H-1:0];
+
     integer n;
     always @(posedge clk) begin
         if (reset | restart_inputs | slice_counter == SLICES_MINUS_1)
