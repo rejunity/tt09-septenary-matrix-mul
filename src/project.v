@@ -107,16 +107,21 @@ module systolic_array #(
     `ifdef SIM
     assign read_accumulators = accumulators;
     assign read_out_queue = out_queue;
+    // buf #1 i_regbuf[31:4] (reg_buf, {registers[i][3:0], registers[i][31:8]});
     `else
     genvar q, w;
     generate
     /* verilator lint_off PINMISSING */
     for (q = 0; q < W*H; q = q+1)
-        for (w = 0; w < 18; w = w+1) begin
-            // See: https://skywater-pdk.readthedocs.io/en/main/contents/libraries/sky130_fd_sc_hd/cells/dlygate4sd1/README.html
-            sky130_fd_sc_hd__dlygate4sd3_1 accumulators_dlygate ( .X(read_accumulators[q][w]), .A(accumulators[q][w]) );
-            sky130_fd_sc_hd__dlygate4sd3_1 out_queue_dlygate    ( .X(read_out_queue[q][w]),    .A(out_queue[q][w]) );
-        end
+        // for (w = 0; w < 18; w = w+1) begin
+        //     // See: https://skywater-pdk.readthedocs.io/en/main/contents/libraries/sky130_fd_sc_hd/cells/dlygate4sd1/README.html
+        //     sky130_fd_sc_hd__dlygate4sd3_1 accumulators_dlygate ( .X(read_accumulators[q][w]), .A(accumulators[q][w]) );
+        //     sky130_fd_sc_hd__dlygate4sd3_1 out_queue_dlygate    ( .X(read_out_queue[q][w]),    .A(out_queue[q][w]) );
+        // end
+    begin
+        sky130_fd_sc_hd__dlygate4sd3_1 accumulators_dlygate[17:0] ( .X(read_accumulators[q][17:0]), .A(accumulators[q][17:0]) );
+        sky130_fd_sc_hd__dlygate4sd3_1 out_queue_dlygate[17:0]    ( .X(read_out_queue[q][17:0]),    .A(out_queue[q][17:0]) );
+    end
     /* verilator lint_on PINMISSING */
     endgenerate
     `endif
