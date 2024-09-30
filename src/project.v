@@ -110,11 +110,14 @@ module systolic_array #(
     `else
     genvar q, w;
     generate
+    /* verilator lint_off PINMISSING */
     for (q = 0; q < W*H; q = q+1)
         for (w = 0; w < 18; w = w+1) begin
+            // See: https://skywater-pdk.readthedocs.io/en/main/contents/libraries/sky130_fd_sc_hd/cells/dlygate4sd1/README.html
             sky130_fd_sc_hd__dlygate4sd3_1 accumulators_dlygate ( .X(read_accumulators[q][w]), .A(accumulators[q][w]) );
             sky130_fd_sc_hd__dlygate4sd3_1 out_queue_dlygate    ( .X(read_out_queue[q][w]),    .A(out_queue[q][w]) );
         end
+    /* verilator lint_on PINMISSING */
     endgenerate
     `endif
     wire  signed [17:0] read_accumulators[W*H-1:0];
