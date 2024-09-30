@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-`define COMPUTE_SLICES 8
+`define COMPUTE_SLICES 4
 
 `default_nettype none
 
@@ -104,31 +104,32 @@ module systolic_array #(
     (* mem2reg *)
     reg  signed [17:0] out_queue         [W*H-1:0];
 
-    `ifdef SIM
-    assign read_accumulators = accumulators;
-    assign read_out_queue = out_queue;
-    // buf #1 i_regbuf[31:4] (reg_buf, {registers[i][3:0], registers[i][31:8]});
-    `else
-    genvar q, w;
-    generate
+    genvar q;
+    /* verilator lint_off GENUNNAMED */
     /* verilator lint_off PINMISSING */
-    for (q = 0; q < W*H; q = q+1)
-        // for (w = 0; w < 18; w = w+1) begin
-        //     // See: https://skywater-pdk.readthedocs.io/en/main/contents/libraries/sky130_fd_sc_hd/cells/dlygate4sd1/README.html
-        //     sky130_fd_sc_hd__dlygate4sd3_1 accumulators_dlygate ( .X(read_accumulators[q][w]), .A(accumulators[q][w]) );
-        //     sky130_fd_sc_hd__dlygate4sd3_1 out_queue_dlygate    ( .X(read_out_queue[q][w]),    .A(out_queue[q][w]) );
-        // end
-    begin
-        wire  signed [17:0] accumulators_buf;
-        wire  signed [17:0] out_queue_buf;
-        sky130_fd_sc_hd__dlygate4sd3_1 accumulators_dlygate[17:0] ( .X(accumulators_buf),   .A(accumulators[q]) );
-        sky130_fd_sc_hd__dlygate4sd3_1 out_queue_dlygate[17:0]    ( .X(out_queue_buf),      .A(out_queue[q]) );
-        assign read_accumulators[q] = accumulators_buf;
-        assign read_out_queue[q] = out_queue_buf;
+    generate
+    for (q = 0; q < W*H; q = q+1) begin
+        `ifdef SIM
+            assign read_accumulators[q] = accumulators[q];
+            assign read_out_queue[q]    = out_queue[q];
+        `else
+            // Manual injection of the delay buffers (sky130_fd_sc_hd__dlygate4sd3_1)
+            //  otherwise OpenLane will do it automatically,
+            //  but at much larger step in the process
+            //  leading to a more complex layout and longer wiring!
+            //
+            // See: https://skywater-pdk.readthedocs.io/en/main/contents/libraries/sky130_fd_sc_hd/cells/dlygate4sd3/README.html
+            wire  signed [17:0] accumulators_buf;
+            wire  signed [17:0] out_queue_buf;
+            sky130_fd_sc_hd__dlygate4sd3_1 accumulators_dlygate[17:0] ( .A(accumulators[q]), .X(accumulators_buf) );
+            sky130_fd_sc_hd__dlygate4sd3_1 out_queue_dlygate[17:0]    ( .A(out_queue[q]),    .X(out_queue_buf) );
+            assign read_accumulators[q] = accumulators_buf;
+            assign read_out_queue[q] = out_queue_buf;
+        `endif
     end
-    /* verilator lint_on PINMISSING */
     endgenerate
-    `endif
+    /* verilator lint_on PINMISSING */
+    /* verilator lint_on GENUNNAMED */
     wire  signed [17:0] read_accumulators[W*H-1:0];
     wire  signed [17:0] read_out_queue   [W*H-1:0];
 
@@ -238,16 +239,19 @@ module systolic_array #(
             end else begin : shift
                 assign accumulators_next[i*W+j-1] =
                               read_accumulators[i*W+j];
+                // Suppress unused signals warning
+                wire _unused_ok = &{zero, sign, mul2, div2, addend};
             end
 
             // for debugging purposes in wave viewer
             wire [17:0] value_curr  = read_accumulators     [i*W+j];
             wire [17:0] value_next  =      accumulators_next[i*W+j];
             wire [17:0] value_queue = read_out_queue        [i*W+j];
+            wire _only_for_debug = &{value_curr, value_next, value_queue};
         end
     endgenerate
 
-    assign out = out_queue[0] >> 9;
+    assign out = out_queue[0][9+:8];
     // assign out = out_queue[0][7:0];
 endmodule
 
