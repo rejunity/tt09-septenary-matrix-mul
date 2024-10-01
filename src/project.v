@@ -109,23 +109,23 @@ module systolic_array #(
     /* verilator lint_off PINMISSING */
     generate
     for (q = 0; q < W*H; q = q+1) begin
-        `ifdef SIM
+        // `ifdef SIM
             assign read_accumulators[q] = accumulators[q];
             assign read_out_queue[q]    = out_queue[q];
-        `else
-            // Manual injection of the delay buffers (sky130_fd_sc_hd__dlygate4sd3_1)
-            //  otherwise OpenLane will do it automatically,
-            //  but at much larger step in the process
-            //  leading to a more complex layout and longer wiring!
-            //
-            // See: https://skywater-pdk.readthedocs.io/en/main/contents/libraries/sky130_fd_sc_hd/cells/dlygate4sd3/README.html
-            wire  signed [17:0] accumulators_buf;
-            wire  signed [17:0] out_queue_buf;
-            sky130_fd_sc_hd__dlygate4sd3_1 accumulators_dlygate[17:0] ( .A(accumulators[q]), .X(accumulators_buf) );
-            sky130_fd_sc_hd__dlygate4sd3_1 out_queue_dlygate[17:0]    ( .A(out_queue[q]),    .X(out_queue_buf) );
-            assign read_accumulators[q] = accumulators_buf;
-            assign read_out_queue[q] = out_queue_buf;
-        `endif
+        // `else
+        //     // Manual injection of the delay buffers (sky130_fd_sc_hd__dlygate4sd3_1)
+        //     //  otherwise OpenLane will do it automatically,
+        //     //  but at much larger step in the process
+        //     //  leading to a more complex layout and longer wiring!
+        //     //
+        //     // See: https://skywater-pdk.readthedocs.io/en/main/contents/libraries/sky130_fd_sc_hd/cells/dlygate4sd3/README.html
+        //     wire  signed [17:0] accumulators_buf;
+        //     wire  signed [17:0] out_queue_buf;
+        //     sky130_fd_sc_hd__dlygate4sd3_1 accumulators_dlygate[17:0] ( .A(accumulators[q]), .X(accumulators_buf) );
+        //     sky130_fd_sc_hd__dlygate4sd3_1 out_queue_dlygate[17:0]    ( .A(out_queue[q]),    .X(out_queue_buf) );
+        //     assign read_accumulators[q] = accumulators_buf;
+        //     assign read_out_queue[q] = out_queue_buf;
+        // `endif
     end
     endgenerate
     /* verilator lint_on PINMISSING */

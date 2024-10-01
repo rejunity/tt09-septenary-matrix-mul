@@ -46,6 +46,9 @@
   "DESIGN_REPAIR_REMOVE_BUFFERS": 1,
   "USE_LIGHTER": 1,
 
+  "//": "Try ECO flow to insert buffers https://armleo-openlane.readthedocs.io/",
+  "ECO_ENABLE": 1,
+
   "//": "Reduce wasted space",
   "TOP_MARGIN_MULT": 1,
   "BOTTOM_MARGIN_MULT": 1,
