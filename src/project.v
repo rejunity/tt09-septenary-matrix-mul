@@ -35,8 +35,7 @@ module tt_um_rejunity_e2m0_x_i8_matmul (
         .div2(weights_div2)
     );
 
-    // @TODO: special weight to initiate readout
-    wire       initiate_read_out = !ena;
+    wire       initiate_read_out = !ena || &ui_in;
     
     systolic_array systolic_array (
         .clk(clk),
